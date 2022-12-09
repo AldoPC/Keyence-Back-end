@@ -7,7 +7,6 @@ class AuthController {
   public async signUp(req: Request, res: Response) {
     const emailExists = await AccountModel.findOne({ email: req.body.email });
     const salt = 10;
-    console.log(emailExists);
 
     if (emailExists)
       return res.status(400).send({ message: "Email already exists" });
@@ -61,6 +60,31 @@ class AuthController {
       if (!account)
         return res.status(404).send({ message: "Account not found." });
       res.status(200).json(account);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+
+  public async getAccountById(req: Request, res: Response) {
+    try {
+      const account = await AccountModel.findById(req.params.id);
+      if (!account)
+        return res.status(404).send({ message: "Account not found." });
+      res.status(200).json(account);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+
+  public async updateAccount(req: Request, res: Response) {
+    const { id } = req.params;
+    try {
+      const account = await AccountModel.findOneAndUpdate(
+        { _id: id },
+        req.body
+      );
+      if (!account) res.status(404).send("Account not found");
+      res.status(200).json({ message: "Account updated" });
     } catch (err) {
       res.status(500).json({ message: err.message });
     }

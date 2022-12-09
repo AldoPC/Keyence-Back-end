@@ -30,7 +30,6 @@ class UserController {
 
   public async createUser(req: Request, res: Response) {
     const user = new UserModel(req.body);
-    console.log(user);
     try {
       const newUser = await user.save();
       if (!newUser) res.status(400).send("User not created");
@@ -85,7 +84,6 @@ class UserController {
 
       users.push(user);
     });
-    console.log(users);
     try {
       const newUsers = await UserModel.insertMany(users);
       if (!newUsers) res.status(400).send("Users not created");
@@ -99,11 +97,9 @@ class UserController {
     const { id } = req.params;
     try {
       const user = await UserModel.findByIdAndDelete(id);
-      console.log(user);
       if (!user) res.status(404).send("User not found");
       res.status(200).json({ message: "User deleted" });
     } catch (err) {
-      console.log(err.message);
       res.status(500).json({ message: err.message });
     }
   }
@@ -111,7 +107,6 @@ class UserController {
   public async updateUser(req: Request, res: Response) {
     const { id } = req.params;
     try {
-      console.log(req.body);
       const user = await UserModel.findOneAndUpdate({ _id: id }, req.body);
       if (!user) res.status(404).send("User not found");
       res.status(200).json({ message: "User updated" });

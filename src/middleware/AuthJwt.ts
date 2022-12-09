@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 
 class AuthJwt {
   public async verifyToken(req: Request, res: Response) {
-    let token = req.headers["x-access-token"] as string;
+    const token = req.headers["x-access-token"] as string;
 
     if (!token) {
       return res.status(403).send({ message: "No token provided!" });
